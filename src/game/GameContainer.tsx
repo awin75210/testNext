@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 const GameContainer = () => {
-  const gameRef = useRef<any>(null);
+  const gameRef = useRef<any>(null); // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   useEffect(() => {
     // Kiểm tra có window hay không
