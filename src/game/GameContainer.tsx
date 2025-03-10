@@ -1,23 +1,27 @@
 import { useEffect, useRef } from "react";
 
 const GameContainer = () => {
-  const gameRef = useRef<any>(null); // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const gameRef = useRef<Phaser.Game | null>(null);
 
   useEffect(() => {
-    // Kiểm tra có window hay không
+    let gameInstance: Phaser.Game | null = null;
+
     if (typeof window !== "undefined") {
-      import("phaser").then((Phaser) => {
+      import("phaser").then(({ default: Phaser }) => {
         import("@/game/Game").then(({ GameConfig }) => {
           if (!gameRef.current) {
-            gameRef.current = new Phaser.Game(GameConfig);
+            gameInstance = new Phaser.Game(GameConfig);
+            gameRef.current = gameInstance;
           }
         });
       });
     }
 
     return () => {
-      gameRef.current?.destroy(true);
-      gameRef.current = null;
+      if (gameRef.current) {
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+      }
     };
   }, []);
 
